@@ -21,7 +21,7 @@ module Roomiverse {
 
 		create() {
 			var tween = this.add.tween(this.group).to({ alpha: 0 }, 1000, Phaser.Easing.Linear.None, true)
-			tween.onComplete.add(() => this.game.state.start('Connect'))
+			tween.onComplete.add(() => this.game.state.start('Room'))
 		}
 	}
 }
