@@ -7,7 +7,7 @@ module Roomiverse {
 			this.group.alpha = 0
 			this.add.tween(this.group).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None, true)
 
-			var bar = this.add.sprite(this.world.centerX - 400, this.world.centerY + 60, 'bar1', 0, this.group)
+			var bar = this.add.sprite(this.world.centerX - 400, this.world.centerY + 60, 'bar', 0, this.group)
 			this.load.setPreloadSprite(bar)
 
 			this.load.audio('serenity', 'audio/serenity.ogg', true)
