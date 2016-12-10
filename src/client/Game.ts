@@ -5,7 +5,7 @@ module Roomiverse {
 
 			this.state.add('Boot', BootState, true)
 			this.state.add('Preload', PreloadState)
-			this.state.add('Room', PreloadState)
+			this.state.add('Room', RoomState)
 		}
 	}
 }
