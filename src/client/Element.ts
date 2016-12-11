@@ -1,76 +1,62 @@
 module Roomiverse {
-	export enum ElementType {
-		Hydrogen,
-		Carbon,
-		Nitrogen,
-		Oxygen,
-		Sodium,
-		Magnesium,
-		Chlorine
-	}
-
 	export class Element {
-		type: ElementType
-		velocity: Point = new Point(0, 0)
-		age: number = 0
+		context: any
 		group: Phaser.Group
+		graphics: Phaser.Graphics
 
-		static lettersForType(type: ElementType): string {
-			switch(type) {
-				case ElementType.Hydrogen:  return 'H'
-				case ElementType.Carbon:    return 'C'
-				case ElementType.Nitrogen:  return 'N'
-				case ElementType.Oxygen:    return 'O'
-				case ElementType.Sodium:    return 'Na'
-				case ElementType.Magnesium: return 'Mg'
-				case ElementType.Chlorine:  return 'Cl'
-			}
-		}
+		id: number
+		type: ItemType
+		velocity: Point = new Point(0, 0)
+		factor: number = 1
+		ttl: number = 0
+		dying: boolean = false
+		attached: boolean = false
 
-		static colorForType(type: ElementType): number {
-			switch(type) {
-				case ElementType.Hydrogen:
-				case ElementType.Carbon:
-				case ElementType.Nitrogen:
-				case ElementType.Oxygen:
-					return 0x33ff88
-				case ElementType.Sodium:
-					return 0xff33aa
-				case ElementType.Magnesium:
-					return 0xff8833
-				case ElementType.Chlorine:
-					return 0x33aaff
-			}
-		}
-
-		constructor(type: ElementType, context: any, group: Phaser.Group, pos: Point) {
+		constructor(id: number, type: ItemType, context: any, group: Phaser.Group, pos: Point) {
+			this.id = id
 			this.type = type
+			this.context = context
 
 			this.group = context.add.group(group)
 			this.group.x = pos.x
 			this.group.y = pos.y
 			this.group.alpha = 0
 			this.group.scale.setTo(0, 0)
-			context.add.tween(this.group).to({alpha: 1}, 150, Phaser.Easing.Linear.None, true)
-			context.add.tween(this.group.scale).to({x: 1, y: 1}, 150, Phaser.Easing.Bounce.InOut, true)
+			this.context.add.tween(this.group).to({alpha: 1}, 150, Phaser.Easing.Linear.None, true)
+			this.context.add.tween(this.group.scale).to({x: 1, y: 1}, 150, Phaser.Easing.Bounce.InOut, true)
 
-			var graphics = context.add.graphics(0, 0, this.group)
-			graphics.beginFill(this.color(), 0.13)
-			graphics.drawCircle(0, 0, 37)
+			this.graphics = context.add.graphics(0, 0, this.group)
+			this.graphics.beginFill(0xffffff, 1)
+			this.graphics.drawCircle(0, 0, 37)
+			this.graphics.tint = this.color()
+			this.graphics.alpha = 0.13
 
 			var text = context.add.text(0, 0, this.letters(), undefined, this.group)
 			text.anchor.setTo(0.5, 0.45)
 			text.font = 'VT323'
 			text.fontSize = 32
 			text.fill = '#' + this.color().toString(16)
+
+			this.ttl = this.initialTTL()
 		}
 
 		letters(): string {
-			return Element.lettersForType(this.type)
+			return lettersForType(this.type)
 		}
 
 		color(): number {
-			return Element.colorForType(this.type)
+			return colorForType(this.type)
+		}
+
+		initialTTL(): number {
+			return ttlForType(this.type)
+		}
+
+		die() {
+			this.dying = true
+			this.context.add.tween(this.group).to({alpha: 0}, 130, Phaser.Easing.Linear.None, true)
+			var t = this.context.add.tween(this.group.scale).to({x: 1.5, y: 1.5}, 130, Phaser.Easing.Bounce.InOut, true)
+			t.onComplete.add(() => { this.group.destroy() }, this)
 		}
 	}
 }
