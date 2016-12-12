@@ -106,6 +106,14 @@ module Roomiverse {
 			this.player.x += this.playerVelocity.x
 			this.player.y += this.playerVelocity.y
 
+			// keep player in room
+			// player diameter is 43, radius is 43/2, plus some leeway
+			const radius = 43 / 2 + 3
+			if(this.player.x < 400 + radius) { this.player.x = 400 + radius }
+			if(this.player.y < 120 + radius) { this.player.y = 120 + radius }
+			if(this.player.x > 880 - radius) { this.player.x = 880 - radius }
+			if(this.player.y > 600 - radius) { this.player.y = 600 - radius }
+
 			var types: ItemType[] = []
 
 			this.chanceSpawn(types, ItemType.Hydrogen,  0.5) // 0.5% chance per tick
@@ -136,11 +144,11 @@ module Roomiverse {
 					this.recipe = recipes[3].get()
 					this.recipeAccum = 0
 				}
-				/*
 				if(this.state['KeyFive']) {
 					this.recipe = recipes[4].get()
 					this.recipeAccum = 0
 				}
+				/*
 				if(this.state['KeySix']) {
 					this.recipe = recipes[5].get()
 					this.recipeAccum = 0
@@ -213,13 +221,21 @@ module Roomiverse {
 
 				var diff = new Point(this.player.x - e.group.x, this.player.y - e.group.y)
 				var dir = diff.normalized()
+
+				// player is 43 radius, plus some leeway
+				const radius = 43 + 10
+				if(Math.sqrt(Math.pow(this.player.x - e.group.x, 2) + Math.pow(this.player.y - e.group.y, 2)) < radius) {
+					dir.x *= -3
+					dir.y *= -3
+				}
+
 				e.velocity.x += dir.x * Math.abs(dir.x) * elementAccel * e.factor * seconds
 				e.velocity.y += dir.y * Math.abs(dir.y) * elementAccel * e.factor * seconds
 				e.velocity.x *= Math.max(0, 1 - elementDecelFactor * seconds)
 				e.velocity.y *= Math.max(0, 1 - elementDecelFactor * seconds)
 
-				e.group.x += e.velocity.x  * seconds
-				e.group.y += e.velocity.y  * seconds
+				e.group.x += e.velocity.x * seconds
+				e.group.y += e.velocity.y * seconds
 			})
 		}
 

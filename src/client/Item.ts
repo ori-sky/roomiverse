@@ -13,6 +13,7 @@ module Roomiverse {
 		Chlorine,
 		Water,
 		Soil,
+		Food,
 		PCB,
 		Computer
 	}
@@ -54,6 +55,15 @@ module Roomiverse {
 				return 0x33aaff
 			case ItemType.Water:
 				return 0xaaccff
+			case ItemType.Soil:
+				return 0x883300
+			case ItemType.Food:
+				return 0x44cc22
+			// valuables
+			case ItemType.PCB:
+				return 0x116611
+			case ItemType.Computer:
+				return 0xbbbccc
 		}
 	}
 
@@ -81,6 +91,8 @@ module Roomiverse {
 				return 53
 			case ItemType.Soil:
 				return 123
+			case ItemType.Food:
+				return 300
 			// valuables
 			case ItemType.PCB:
 			case ItemType.Computer:

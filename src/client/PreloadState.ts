@@ -21,6 +21,7 @@ module Roomiverse {
 
 			recipes.push(new Recipe(ItemType.Water,    [ItemType.Hydrogen, ItemType.Oxygen, ItemType.Hydrogen]))
 			recipes.push(new Recipe(ItemType.Soil,     [ItemType.Oxygen, ItemType.Oxygen, ItemType.Silicon, ItemType.Aluminium]))
+			recipes.push(new Recipe(ItemType.Food,     [ItemType.Soil, ItemType.Water]))
 			recipes.push(new Recipe(ItemType.PCB,      [ItemType.Silicon, ItemType.Silicon, ItemType.Oxygen]))
 			recipes.push(new Recipe(ItemType.Computer, [ItemType.PCB, ItemType.PCB, ItemType.Silicon]))
 		}
