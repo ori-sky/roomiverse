@@ -6,8 +6,7 @@ module Roomiverse {
 		timeAccum: number = 0
 		state: { [k: string]: boolean }
 
-		player: Phaser.Group
-		playerVelocity = new Point(0, 0)
+		player: Player
 
 		nextID: number = 0
 		itemsGroup: Phaser.Group
@@ -43,13 +42,7 @@ module Roomiverse {
 
 			this.itemsGroup = this.add.group(this.group)
 
-			this.player = this.add.group(this.group)
-			this.player.x = this.world.centerX
-			this.player.y = this.world.centerY
-
-			var playerGraphics = this.add.graphics(0, 0, this.player)
-			playerGraphics.beginFill(0xffffff, 1)
-			playerGraphics.drawCircle(0, 0, 43)
+			this.player = new Player(this, this.group)
 
 			this.makeKeyState(Phaser.Keyboard.W, 'KeyW')
 			this.makeKeyState(Phaser.Keyboard.A, 'KeyA')
@@ -96,23 +89,14 @@ module Roomiverse {
 
 			if(direction.x != 0 || direction.y != 0) {
 				direction = direction.normalized()
-				this.playerVelocity.x += direction.x * playerAccel
-				this.playerVelocity.y += direction.y * playerAccel
+				this.player.velocity.x += direction.x * playerAccel
+				this.player.velocity.y += direction.y * playerAccel
 			}
 
-			this.playerVelocity.x *= Math.max(0, 1 - playerDecelFactor * seconds)
-			this.playerVelocity.y *= Math.max(0, 1 - playerDecelFactor * seconds)
+			this.player.velocity.x *= Math.max(0, 1 - playerDecelFactor * seconds)
+			this.player.velocity.y *= Math.max(0, 1 - playerDecelFactor * seconds)
 
-			this.player.x += this.playerVelocity.x
-			this.player.y += this.playerVelocity.y
-
-			// keep player in room
-			// player diameter is 43, radius is 43/2, plus some leeway
-			const radius = 43 / 2 + 3
-			if(this.player.x < 400 + radius) { this.player.x = 400 + radius }
-			if(this.player.y < 120 + radius) { this.player.y = 120 + radius }
-			if(this.player.x > 880 - radius) { this.player.x = 880 - radius }
-			if(this.player.y > 600 - radius) { this.player.y = 600 - radius }
+			this.player.tick(seconds)
 
 			var types: ItemType[] = []
 
@@ -219,12 +203,12 @@ module Roomiverse {
 					}
 				}
 
-				var diff = new Point(this.player.x - item.group.x, this.player.y - item.group.y)
+				var diff = new Point(this.player.group.x - item.group.x, this.player.group.y - item.group.y)
 				var dir = diff.normalized()
 
 				// player is 43 radius, plus some leeway
 				const radius = 43 + 10
-				if(Math.sqrt(Math.pow(this.player.x - item.group.x, 2) + Math.pow(this.player.y - item.group.y, 2)) < radius) {
+				if(Math.sqrt(Math.pow(this.player.group.x - item.group.x, 2) + Math.pow(this.player.group.y - item.group.y, 2)) < radius) {
 					dir.x *= -3
 					dir.y *= -3
 				}
