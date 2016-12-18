@@ -57,10 +57,6 @@ module Roomiverse {
 			this.makeKeyState(Phaser.Keyboard.THREE, 'KeyThree')
 			this.makeKeyState(Phaser.Keyboard.FOUR,  'KeyFour')
 			this.makeKeyState(Phaser.Keyboard.FIVE,  'KeyFive')
-			this.makeKeyState(Phaser.Keyboard.SIX,   'KeySix')
-			this.makeKeyState(Phaser.Keyboard.SEVEN, 'KeySeven')
-			this.makeKeyState(Phaser.Keyboard.EIGHT, 'KeyEight')
-			this.makeKeyState(Phaser.Keyboard.NINE,  'KeyNine')
 		}
 
 		update() {
@@ -129,24 +125,6 @@ module Roomiverse {
 					this.recipe = recipes[4].get()
 					this.recipeAccum = 0
 				}
-				/*
-				if(this.state['KeySix']) {
-					this.recipe = recipes[5].get()
-					this.recipeAccum = 0
-				}
-				if(this.state['KeySeven']) {
-					this.recipe = recipes[6].get()
-					this.recipeAccum = 0
-				}
-				if(this.state['KeyEight']) {
-					this.recipe = recipes[7].get()
-					this.recipeAccum = 0
-				}
-				if(this.state['KeyNine']) {
-					this.recipe = recipes[8].get()
-					this.recipeAccum = 0
-				}
-				*/
 			}
 
 			// crafting
