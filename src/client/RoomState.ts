@@ -77,7 +77,6 @@ module Roomiverse {
 			this.recipeAccum += seconds
 
 			const playerAccel = 1
-			const playerDecelFactor = 10
 			const elementAccel = 20
 			const elementDecelFactor = 0.13
 
@@ -87,14 +86,12 @@ module Roomiverse {
 			if(this.state['KeyS']) { direction.y += 1 }
 			if(this.state['KeyD']) { direction.x += 1 }
 
-			if(direction.x != 0 || direction.y != 0) {
+			if(direction.length() !== 0) {
 				direction = direction.normalized()
-				this.player.velocity.x += direction.x * playerAccel
-				this.player.velocity.y += direction.y * playerAccel
+				direction.x *= playerAccel
+				direction.y *= playerAccel
+				this.player.accelBy(direction)
 			}
-
-			this.player.velocity.x *= Math.max(0, 1 - playerDecelFactor * seconds)
-			this.player.velocity.y *= Math.max(0, 1 - playerDecelFactor * seconds)
 
 			this.player.tick(seconds)
 
