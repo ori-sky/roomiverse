@@ -11,7 +11,7 @@ module Roomiverse {
 
 		nextID: number = 0
 		itemsGroup: Phaser.Group
-		items: { [id: number]: Element } = {}
+		items: { [id: number]: Item } = {}
 
 		recipe: RecipeInstance = null
 		recipeAccum: number = 0
@@ -171,11 +171,11 @@ module Roomiverse {
 			// crafting
 			if(this.recipe !== null && this.recipe.complete()) {
 				types.push(this.recipe.result)
-				this.recipe.consumes.forEach(e => {
-					if(!e.dying) {
-						e.die()
-						this.items[e.id] = undefined
-						delete this.items[e.id]
+				this.recipe.consumes.forEach(item => {
+					if(!item.dying) {
+						item.die()
+						this.items[item.id] = undefined
+						delete this.items[item.id]
 					}
 				})
 				this.recipe = null
@@ -187,55 +187,55 @@ module Roomiverse {
 				var pos = new Point(640 + phi * Math.cos(theta), 360 + phi * Math.sin(theta))
 
 				var id = this.nextID++
-				var element = new Element(id, t, this, this.itemsGroup, pos)
+				var element = new Item(id, t, this, this.itemsGroup, pos)
 				element.velocity.x = this.rnd.integerInRange(-20, 20)
 				element.velocity.y = this.rnd.integerInRange(-20, 20)
 				this.items[id] = element
 			})
 
 			Object.keys(this.items).forEach(k => {
-				var e = this.items[k]
-				e.ttl -= seconds
+				var item = this.items[k]
+				item.ttl -= seconds
 
 				// crafting
-				if(this.recipe && !e.attached) {
+				if(this.recipe && !item.attached) {
 					for(var i = 0; i < this.recipe.needs.length; ++i) {
-						if(this.recipe.needs[i] === e.type) {
-							e.attached = true
-							e.factor = 20
-							e.graphics.alpha = 0.5
+						if(this.recipe.needs[i] === item.type) {
+							item.attached = true
+							item.factor = 20
+							item.graphics.alpha = 0.5
 							this.recipe.needs.splice(i, 1)
-							this.recipe.consumes.push(e)
+							this.recipe.consumes.push(item)
 							break
 						}
 					}
 				}
 
-				if(e.ttl <= 0 && !e.attached) {
-					if(!e.dying) {
-						e.die()
+				if(item.ttl <= 0 && !item.attached) {
+					if(!item.dying) {
+						item.die()
 						this.items[k] = undefined
 						delete this.items[k]
 					}
 				}
 
-				var diff = new Point(this.player.x - e.group.x, this.player.y - e.group.y)
+				var diff = new Point(this.player.x - item.group.x, this.player.y - item.group.y)
 				var dir = diff.normalized()
 
 				// player is 43 radius, plus some leeway
 				const radius = 43 + 10
-				if(Math.sqrt(Math.pow(this.player.x - e.group.x, 2) + Math.pow(this.player.y - e.group.y, 2)) < radius) {
+				if(Math.sqrt(Math.pow(this.player.x - item.group.x, 2) + Math.pow(this.player.y - item.group.y, 2)) < radius) {
 					dir.x *= -3
 					dir.y *= -3
 				}
 
-				e.velocity.x += dir.x * Math.abs(dir.x) * elementAccel * e.factor * seconds
-				e.velocity.y += dir.y * Math.abs(dir.y) * elementAccel * e.factor * seconds
-				e.velocity.x *= Math.max(0, 1 - elementDecelFactor * seconds)
-				e.velocity.y *= Math.max(0, 1 - elementDecelFactor * seconds)
+				item.velocity.x += dir.x * Math.abs(dir.x) * elementAccel * item.factor * seconds
+				item.velocity.y += dir.y * Math.abs(dir.y) * elementAccel * item.factor * seconds
+				item.velocity.x *= Math.max(0, 1 - elementDecelFactor * seconds)
+				item.velocity.y *= Math.max(0, 1 - elementDecelFactor * seconds)
 
-				e.group.x += e.velocity.x * seconds
-				e.group.y += e.velocity.y * seconds
+				item.group.x += item.velocity.x * seconds
+				item.group.y += item.velocity.y * seconds
 			})
 		}
 
@@ -255,7 +255,7 @@ module Roomiverse {
 		}
 
 		chanceSpawn(types: ItemType[], type: ItemType, percent: number) {
-			var chance = 5 / Math.pow(ttlForType(type), 1.2)
+			var chance = 5 / Math.pow(Item.initialTTLForType(type), 1.2)
 			if(this.rnd.realInRange(0, 100) < chance) {
 				types.push(type)
 			}

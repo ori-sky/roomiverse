@@ -16,7 +16,7 @@ module Roomiverse {
 	export class RecipeInstance {
 		result: ItemType
 		needs: ItemType[]
-		consumes: Element[]
+		consumes: Item[]
 
 		constructor(result: ItemType, needs: ItemType[]) {
 			this.result = result
