@@ -83,10 +83,7 @@ module Roomiverse {
 			if(this.state['KeyD']) { direction.x += 1 }
 
 			if(direction.length() !== 0) {
-				direction = direction.normalized()
-				direction.x *= playerAccel
-				direction.y *= playerAccel
-				this.player.accelBy(direction)
+				this.player.accelBy(direction.normalized(playerAccel))
 			}
 
 			this.player.tick(seconds)
@@ -184,14 +181,12 @@ module Roomiverse {
 				// player is 43 radius, plus some leeway
 				const radius = 43 + 10
 				if(Math.sqrt(Math.pow(this.player.group.x - item.group.x, 2) + Math.pow(this.player.group.y - item.group.y, 2)) < radius) {
-					dir.x *= -3
-					dir.y *= -3
+					dir = dir.scaled(-3)
 				}
 
 				item.velocity.x += dir.x * Math.abs(dir.x) * elementAccel * item.factor * seconds
 				item.velocity.y += dir.y * Math.abs(dir.y) * elementAccel * item.factor * seconds
-				item.velocity.x *= Math.max(0, 1 - elementDecelFactor * seconds)
-				item.velocity.y *= Math.max(0, 1 - elementDecelFactor * seconds)
+				item.velocity = item.velocity.scaled(Math.max(0, 1 - elementDecelFactor * seconds))
 
 				item.group.x += item.velocity.x * seconds
 				item.group.y += item.velocity.y * seconds
