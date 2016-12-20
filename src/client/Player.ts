@@ -4,7 +4,6 @@ module Roomiverse {
 		group: Phaser.Group
 		graphics: Phaser.Graphics
 		velocity: Point = new Point()
-		decelFactor: number = 10
 		radius: number = 43
 
 		constructor(context: any, group: Phaser.Group) {
@@ -20,8 +19,8 @@ module Roomiverse {
 		}
 
 		tick(seconds: number) {
-			this.velocity = this.velocity.scaled(Math.max(0, 1 - this.decelFactor * seconds))
-			this.moveBy(this.velocity)
+			this.velocity.scale(Math.pow(0.99, 1000 * seconds))
+			this.moveBy(this.velocity.scaled(seconds))
 
 			// keep player in room
 			const leeway = this.radius / 2 + 3
@@ -32,7 +31,7 @@ module Roomiverse {
 		}
 
 		accelBy(p: Point) {
-			this.velocity = this.velocity.translatedBy(p)
+			this.velocity.translateBy(p)
 		}
 
 		moveBy(p: Point) {
