@@ -60,12 +60,12 @@ module Roomiverse {
 		}
 
 		update() {
-			this.timeAccum += this.game.time.elapsed
-			const timestep = 1000 / 60
+			this.timeAccum += this.game.time.elapsed / 1000
+			const timestep = 1 / 60
 
 			if(this.timeAccum >= timestep) {
 				this.timeAccum -= timestep
-				this.tick(timestep / 1000)
+				this.tick(timestep)
 			}
 		}
 
@@ -76,7 +76,7 @@ module Roomiverse {
 			const elementAccel = 20
 			const elementDecelFactor = 0.13
 
-			var direction = new Point(0, 0)
+			var direction = new Point()
 			if(this.state['KeyW']) { direction.y -= 1 }
 			if(this.state['KeyA']) { direction.x -= 1 }
 			if(this.state['KeyS']) { direction.y += 1 }
