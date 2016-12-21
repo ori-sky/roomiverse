@@ -19,7 +19,7 @@ module Roomiverse {
 		}
 
 		tick(seconds: number) {
-			this.velocity.scale(Math.pow(0.99, 1000 * seconds))
+			this.velocity.scale(Math.pow(0.987, 1000 * seconds))
 			this.moveBy(this.velocity.scaled(seconds))
 
 			// keep player in room

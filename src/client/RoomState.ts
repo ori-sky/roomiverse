@@ -72,7 +72,7 @@ module Roomiverse {
 		tick(seconds: number) {
 			this.recipeAccum += seconds
 
-			const playerAccel = 2000
+			const playerAccel = 4000
 			const elementAccel = 20
 			const elementDecelFactor = 0.13
 
