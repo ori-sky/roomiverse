@@ -55,6 +55,7 @@ module Roomiverse {
 			text.font = 'VT323'
 			text.fontSize = 32
 			text.fill = '#' + this.color().toString(16)
+			text.cacheAsBitmap = true
 
 			this.ttl = this.initialTTL()
 		}
