@@ -132,6 +132,7 @@ module Roomiverse {
 				this.recipe.consumes.forEach(item => {
 					if(!item.dying) {
 						item.die()
+						item.velocity.pool()
 						this.items[item.id] = undefined
 						delete this.items[item.id]
 					}
@@ -174,6 +175,7 @@ module Roomiverse {
 				if(item.ttl <= 0 && !item.attached) {
 					if(!item.dying) {
 						item.die()
+						this.items[k].velocity.pool()
 						this.items[k] = undefined
 						delete this.items[k]
 					}
