@@ -25,7 +25,7 @@ module Roomiverse {
 
 		id: number
 		type: ItemType
-		velocity: Point = new Point(0, 0)
+		velocity: Point = Point.create(0, 0)
 		factor: number = 1
 		ttl: number = 0
 		dying: boolean = false

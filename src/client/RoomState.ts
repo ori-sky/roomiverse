@@ -76,16 +76,17 @@ module Roomiverse {
 			const elementAccel = 20
 			const elementDecelFactor = 0.13
 
-			var direction = new Point()
+			var direction = Point.create()
 			if(this.state['KeyW']) { direction.y -= 1 }
 			if(this.state['KeyA']) { direction.x -= 1 }
 			if(this.state['KeyS']) { direction.y += 1 }
 			if(this.state['KeyD']) { direction.x += 1 }
 
 			if(direction.length() !== 0) {
-				direction.normalize(playerAccel * seconds);
+				direction.normalize(playerAccel * seconds)
 				this.player.accelBy(direction)
 			}
+			direction.pool()
 
 			this.player.tick(seconds)
 
@@ -141,13 +142,15 @@ module Roomiverse {
 			types.forEach(t => {
 				var theta = this.rnd.realInRange(0, Math.PI * 2)
 				var phi = this.rnd.realInRange(260, 680)
-				var pos = new Point(640 + phi * Math.cos(theta), 360 + phi * Math.sin(theta))
+				var pos = Point.create(640 + phi * Math.cos(theta), 360 + phi * Math.sin(theta))
 
 				var id = this.nextID++
 				var element = new Item(id, t, this, this.itemsGroup, pos)
 				element.velocity.x = this.rnd.integerInRange(-20, 20)
 				element.velocity.y = this.rnd.integerInRange(-20, 20)
 				this.items[id] = element
+
+				pos.pool()
 			})
 
 			Object.keys(this.items).forEach(k => {
@@ -176,7 +179,7 @@ module Roomiverse {
 					}
 				}
 
-				var dir = new Point(this.player.group.x - item.group.x, this.player.group.y - item.group.y)
+				var dir = Point.create(this.player.group.x - item.group.x, this.player.group.y - item.group.y)
 				dir.normalize()
 
 				// player is 43 radius, plus some leeway
@@ -188,6 +191,7 @@ module Roomiverse {
 				item.velocity.x += dir.x * Math.abs(dir.x) * elementAccel * item.factor * seconds
 				item.velocity.y += dir.y * Math.abs(dir.y) * elementAccel * item.factor * seconds
 				item.velocity = item.velocity.scaled(Math.max(0, 1 - elementDecelFactor * seconds))
+				dir.pool()
 
 				item.group.x += item.velocity.x * seconds
 				item.group.y += item.velocity.y * seconds

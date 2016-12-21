@@ -3,7 +3,7 @@ module Roomiverse {
 		context: any
 		group: Phaser.Group
 		graphics: Phaser.Graphics
-		velocity: Point = new Point()
+		velocity: Point = Point.create()
 		radius: number = 43
 
 		constructor(context: any, group: Phaser.Group) {
