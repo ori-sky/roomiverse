@@ -92,10 +92,10 @@ module Roomiverse {
 
 			var types: ItemType[] = []
 
-			this.chanceSpawn(types, ItemType.Hydrogen,  0.5) // 0.5% chance per tick
-			this.chanceSpawn(types, ItemType.Oxygen,    0.3)
-			this.chanceSpawn(types, ItemType.Silicon,   0.15)
-			this.chanceSpawn(types, ItemType.Aluminium, 0.12)
+			this.chanceSpawn(types, ItemType.Hydrogen)
+			this.chanceSpawn(types, ItemType.Oxygen)
+			this.chanceSpawn(types, ItemType.Silicon)
+			this.chanceSpawn(types, ItemType.Aluminium)
 
 			if(this.state['KeyZ']) { types.push(ItemType.Hydrogen) }
 			if(this.state['KeyX']) { types.push(ItemType.Sodium) }
@@ -215,7 +215,7 @@ module Roomiverse {
 			})
 		}
 
-		chanceSpawn(types: ItemType[], type: ItemType, percent: number) {
+		chanceSpawn(types: ItemType[], type: ItemType) {
 			var chance = 5 / Math.pow(Item.initialTTLForType(type), 1.2)
 			if(this.rnd.realInRange(0, 100) < chance) {
 				types.push(type)
