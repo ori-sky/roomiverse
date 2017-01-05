@@ -3,8 +3,10 @@ module Roomiverse {
 		context: any
 		group: Phaser.Group
 		graphics: Phaser.Graphics
-		velocity: Point = Point.create()
+
 		radius: number = 43
+		velocity: Point = Point.create()
+		inventory: Inventory
 
 		constructor(context: any, group: Phaser.Group) {
 			this.context = context
@@ -16,6 +18,8 @@ module Roomiverse {
 			this.graphics = this.context.add.graphics(0, 0, this.group)
 			this.graphics.beginFill(0xffffff, 1)
 			this.graphics.drawCircle(0, 0, this.radius)
+
+			this.inventory = new Inventory(context, group)
 		}
 
 		tick(seconds: number) {
