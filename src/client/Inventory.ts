@@ -3,18 +3,17 @@ module Roomiverse {
 		context: any
 		group: Phaser.Group
 		graphics: Phaser.Graphics
+		item: Item
 		amount: number = 0
 
-		constructor(context: any, group: Phaser.Group, p: Point) {
+		constructor(context: any, group: Phaser.Group, p: Point, type: ItemType) {
 			this.context = context
 
 			this.group = this.context.add.group(group)
 			this.group.x = p.x
 			this.group.y = p.y
 
-			this.graphics = this.context.add.graphics(0, 0, this.group)
-			this.graphics.beginFill(0xffffff, 1)
-			this.graphics.drawCircle(0, 0, 5)
+			this.item = new Item(-1, type, context, this.group, Point.create())
 		}
 	}
 
@@ -34,8 +33,8 @@ module Roomiverse {
 
 		create(type: ItemType) {
 			if(this.items[type] === undefined) {
-				var pos = Point.create((type % 4) * 80, Math.floor(type / 4) * 80)
-				this.items[type] = new InventoryItem(this.context, this.group, pos)
+				var pos = Point.create((type % 4) * 100 + 50, Math.floor(type / 4) * 80 + 40)
+				this.items[type] = new InventoryItem(this.context, this.group, pos, type)
 			}
 		}
 
