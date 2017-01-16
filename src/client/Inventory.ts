@@ -2,7 +2,7 @@ module Roomiverse {
 	class InventoryItem {
 		context: any
 		group: Phaser.Group
-		graphics: Phaser.Graphics
+		text: Phaser.Text
 		item: Item
 		amount: number = 0
 
@@ -14,6 +14,17 @@ module Roomiverse {
 			this.group.y = p.y
 
 			this.item = new Item(-1, type, context, this.group, Point.create())
+
+			this.text = context.add.text(13, 19, '0', undefined, this.group)
+			this.text.anchor.setTo(0.5, 0.45)
+			this.text.font = 'VT323'
+			this.text.fontSize = 20
+			this.text.fill = '#fff'
+		}
+
+		add(amount: number) {
+			this.amount += amount
+			this.text.setText(Math.floor(this.amount).toString())
 		}
 	}
 
@@ -40,7 +51,7 @@ module Roomiverse {
 
 		add(type: ItemType, amount: number) {
 			this.create(type)
-			this.items[type].amount += amount
+			this.items[type].add(amount)
 		}
 	}
 }

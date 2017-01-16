@@ -187,7 +187,7 @@ module Roomiverse {
 				// player is 43 radius, plus some leeway
 				const radius = 43 + 10
 				if(Math.sqrt(Math.pow(this.player.group.x - item.group.x, 2) + Math.pow(this.player.group.y - item.group.y, 2)) < radius) {
-					this.player.inventory.add(item.type, seconds)
+					this.player.inventory.add(item.type, seconds * 100)
 					dir.scale(-3)
 				}
 
