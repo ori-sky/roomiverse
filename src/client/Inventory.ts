@@ -33,6 +33,7 @@ module Roomiverse {
 		group: Phaser.Group
 		graphics: Phaser.Graphics
 		items: { [type: number]: InventoryItem } = {}
+		itemsArray: number[] = []
 
 		constructor(context: any, group: Phaser.Group) {
 			this.context = context
@@ -44,8 +45,10 @@ module Roomiverse {
 
 		create(type: ItemType) {
 			if(this.items[type] === undefined) {
-				var pos = Point.create((type % 4) * 100 + 50, Math.floor(type / 4) * 80 + 40)
+				var n = this.itemsArray.length
+				var pos = Point.create((n % 4) * 100 + 50, Math.floor(n / 4) * 80 + 40)
 				this.items[type] = new InventoryItem(this.context, this.group, pos, type)
+				this.itemsArray.push(type)
 			}
 		}
 
