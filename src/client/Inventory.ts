@@ -13,7 +13,7 @@ module Roomiverse {
 			this.group.x = p.x
 			this.group.y = p.y
 
-			this.item = new Item(-1, type, context, this.group, Point.create())
+			this.item = new Item(context, this.group, -1, type, Point.create(), 1)
 
 			this.text = context.add.text(13, 19, '0', undefined, this.group)
 			this.text.anchor.setTo(0.5, 0.45)

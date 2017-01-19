@@ -26,15 +26,24 @@ module Roomiverse {
 		id: number
 		type: ItemType
 		velocity: Point = Point.create(0, 0)
+		initialAmount: number = 0
+		initialRadius: number = 0
+		amount: number = 0
+		radius: number = 0
+
 		factor: number = 1
-		ttl: number = 0
 		dying: boolean = false
 		attached: boolean = false
 
-		constructor(id: number, type: ItemType, context: any, group: Phaser.Group, pos: Point) {
+		constructor(context: any, group: Phaser.Group, id: number, type: ItemType, pos: Point, amount: number) {
 			this.id = id
 			this.type = type
 			this.context = context
+
+			this.initialAmount = amount
+			this.amount = amount
+			this.initialRadius = Math.sqrt(this.initialAmount / Math.PI)
+			this.radius = Math.sqrt(this.amount / Math.PI)
 
 			this.group = context.add.group(group)
 			this.group.x = pos.x
@@ -46,7 +55,7 @@ module Roomiverse {
 
 			this.graphics = context.add.graphics(0, 0, this.group)
 			this.graphics.beginFill(0xffffff, 1)
-			this.graphics.drawCircle(0, 0, 37)
+			this.graphics.drawCircle(0, 0, this.radius)
 			this.graphics.tint = this.color()
 			this.graphics.alpha = 0.13
 
@@ -56,8 +65,6 @@ module Roomiverse {
 			text.fontSize = 32
 			text.fill = '#' + this.color().toString(16)
 			text.cacheAsBitmap = true
-
-			this.ttl = this.initialTTL()
 		}
 
 		letters(): string {
@@ -68,8 +75,11 @@ module Roomiverse {
 			return Item.colorForType(this.type)
 		}
 
-		initialTTL(): number {
-			return Item.initialTTLForType(this.type)
+		remove(amount: number) {
+			this.amount -= amount
+			this.radius = Math.sqrt(this.amount / Math.PI)
+			this.group.scale.x = this.radius / this.initialRadius
+			this.group.scale.y = this.radius / this.initialRadius
 		}
 
 		die() {

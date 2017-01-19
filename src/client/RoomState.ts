@@ -146,7 +146,7 @@ module Roomiverse {
 				var pos = Point.create(640 + phi * Math.cos(theta), 360 + phi * Math.sin(theta))
 
 				var id = this.nextID++
-				var element = new Item(id, t, this, this.itemsGroup, pos)
+				var element = new Item(this, this.itemsGroup, id, t, pos, this.rnd.realInRange(50, 500))
 				element.velocity.x = this.rnd.integerInRange(-20, 20)
 				element.velocity.y = this.rnd.integerInRange(-20, 20)
 				this.items[id] = element
@@ -155,8 +155,7 @@ module Roomiverse {
 			})
 
 			Object.keys(this.items).forEach(k => {
-				var item = this.items[k]
-				item.ttl -= seconds
+				var item: Item = this.items[k]
 
 				// crafting
 				if(this.recipe && !item.attached) {
@@ -172,7 +171,7 @@ module Roomiverse {
 					}
 				}
 
-				if(item.ttl <= 0 && !item.attached) {
+				if(item.amount <= 0 && !item.attached) {
 					if(!item.dying) {
 						item.die()
 						this.items[k].velocity.pool()
@@ -184,15 +183,14 @@ module Roomiverse {
 				var dir = Point.create(this.player.group.x - item.group.x, this.player.group.y - item.group.y)
 				dir.normalize()
 
-				// player is 43 radius, plus some leeway
-				const radius = 43 + 10
-				if(Math.sqrt(Math.pow(this.player.group.x - item.group.x, 2) + Math.pow(this.player.group.y - item.group.y, 2)) < radius) {
+				if(Math.sqrt(Math.pow(this.player.group.x - item.group.x, 2) + Math.pow(this.player.group.y - item.group.y, 2)) < this.player.radius + item.radius) {
+					item.remove(seconds * 100)
 					this.player.inventory.add(item.type, seconds * 100)
 					dir.scale(-3)
 				}
 
-				item.velocity.x += dir.x * Math.abs(dir.x) * elementAccel * item.factor * seconds
-				item.velocity.y += dir.y * Math.abs(dir.y) * elementAccel * item.factor * seconds
+				item.velocity.x += dir.x * Math.abs(dir.x) * elementAccel * item.factor * seconds / (item.amount / 100)
+				item.velocity.y += dir.y * Math.abs(dir.y) * elementAccel * item.factor * seconds / (item.amount / 100)
 				item.velocity = item.velocity.scaled(Math.max(0, 1 - elementDecelFactor * seconds))
 				dir.pool()
 
